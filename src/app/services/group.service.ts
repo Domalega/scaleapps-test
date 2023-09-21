@@ -13,7 +13,11 @@ export class GroupService {
     return of(groupsData).pipe(delay(300));
   }
 
-  createGroup(newGroup: IGroup): void {
-    groupsData.push(newGroup);
+  createGroup(newGroup: IGroup): Observable<void> {
+    return new Observable<void>((obserer) => {
+      groupsData.push(newGroup);
+      obserer.next();
+      obserer.complete();
+    }).pipe(delay(300));
   }
 }

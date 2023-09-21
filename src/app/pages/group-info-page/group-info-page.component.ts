@@ -49,6 +49,7 @@ export class GroupInfoPageComponent implements OnInit {
 
   createStudnet(): void {
     if (!this.inputStudentName) return;
+
     const newStudnet: IStudent = {
       id: createId(0),
       idGroup: this.idGroup,
@@ -56,14 +57,16 @@ export class GroupInfoPageComponent implements OnInit {
       fullName: this.inputStudentName,
     };
 
-    this.studentService.createStudent(newStudnet);
+    this.studentService.createStudent(newStudnet).subscribe(() => {
+      this.getData();
+    });
     this.inputStudentName = '';
-    this.getData();
   }
 
   deleteStudent(deletedStudent: IStudent): void {
-    this.studentService.deleteStudent(deletedStudent);
-    this.getData();
+    this.studentService.deleteStudent(deletedStudent).subscribe(() => {
+      this.getData();
+    });
   }
 
   sortList(): void {

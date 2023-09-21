@@ -13,14 +13,23 @@ export class StudentsService {
     return of(students).pipe(delay(300));
   }
 
-  createStudent(newStudent: IStudent): void {
-    students.push(newStudent);
+  createStudent(newStudent: IStudent): Observable<void> {
+    return new Observable<void>((observer) => {
+      students.push(newStudent);
+      observer.next();
+      observer.complete();
+    }).pipe(delay(300));
   }
 
-  deleteStudent(deletedStudent: IStudent): void {
-    const index = students.findIndex((student) => {
-      return student.id === deletedStudent.id;
-    });
-    if (index !== -1) students.splice(index, 1);
+  deleteStudent(deletedStudent: IStudent): Observable<void> {
+    return new Observable<void>((observer) => {
+      const index = students.findIndex((student) => {
+        return student.id === deletedStudent.id;
+      });
+      if (index !== -1) students.splice(index, 1);
+
+      observer.next();
+      observer.complete();
+    }).pipe(delay(300));
   }
 }
