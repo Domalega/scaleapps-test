@@ -50,21 +50,29 @@ export const students: IStudent[] = [
   },
 ];
 
+const findLength = (idGroup: string): number => {
+  return students.filter((students) => students.idGroup === idGroup).length;
+};
+
 export const groupsData: IGroup[] = [
   {
     id: createId(1),
     number: '20-01',
-    numberOfStudents: students.length,
+    numberOfStudents: findLength(createId(1)),
   },
-  { id: createId(2), number: '20-02', numberOfStudents: 8 },
+  {
+    id: createId(2),
+    number: '20-02',
+    numberOfStudents: findLength(createId(2)),
+  },
   {
     id: createId(3),
     number: '19-03',
-    numberOfStudents: 22,
+    numberOfStudents: findLength(createId(3)),
   },
   {
     id: createId(4),
     number: '19-01',
-    numberOfStudents: 109,
+    numberOfStudents: findLength(createId(4)),
   },
 ];

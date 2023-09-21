@@ -32,7 +32,6 @@ export class GroupPageComponent implements OnInit {
 
     this.groupService.createGroup(newGroup).subscribe(() => {
       const groups = this.groups$.getValue();
-      groups.push(newGroup);
       this.groups$.next(groups);
       this.inputGroupName = '';
     });

@@ -16,6 +16,7 @@ export class GroupService {
   createGroup(newGroup: IGroup): Observable<void> {
     return new Observable<void>((obserer) => {
       groupsData.push(newGroup);
+
       obserer.next();
       obserer.complete();
     }).pipe(delay(300));
