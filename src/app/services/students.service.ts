@@ -16,6 +16,7 @@ export class StudentsService {
   createStudent(newStudent: IStudent): Observable<void> {
     return new Observable<void>((observer) => {
       students.push(newStudent);
+
       observer.next();
       observer.complete();
     }).pipe(delay(300));
@@ -23,9 +24,9 @@ export class StudentsService {
 
   deleteStudent(deletedStudent: IStudent): Observable<void> {
     return new Observable<void>((observer) => {
-      const index = students.findIndex((student) => {
-        return student.id === deletedStudent.id;
-      });
+      const index = students.findIndex(
+        (student) => student.id === deletedStudent.id
+      );
       if (index !== -1) students.splice(index, 1);
 
       observer.next();

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject, auditTime } from 'rxjs';
 import { createId } from 'src/app/backData/serverData';
 import { IGroup } from 'src/app/modeles/group';
 import { GroupService } from 'src/app/services/group.service';
@@ -9,7 +10,7 @@ import { GroupService } from 'src/app/services/group.service';
   templateUrl: './group-page.component.html',
 })
 export class GroupPageComponent implements OnInit {
-  groups: IGroup[] | undefined;
+  groups$: BehaviorSubject<IGroup[]> = new BehaviorSubject<IGroup[]>([]);
   inputGroupName: string | undefined;
   isDesc: boolean = true;
 
@@ -17,7 +18,7 @@ export class GroupPageComponent implements OnInit {
 
   getData(): void {
     this.groupService.listGroups().subscribe((groups) => {
-      this.groups = groups;
+      this.groups$.next(groups);
     });
   }
 
@@ -29,8 +30,13 @@ export class GroupPageComponent implements OnInit {
       numberOfStudents: 0,
     };
 
-    this.groupService.createGroup(newGroup);
-    this.inputGroupName = '';
+    this.groupService.createGroup(newGroup).subscribe(() => {
+      const groups = this.groups$.getValue();
+      groups.push(newGroup);
+      this.groups$.next(groups);
+      this.inputGroupName = '';
+    });
+
     this.router.navigate(['/group', newGroup.id], {
       queryParams: {
         number: newGroup.number,
@@ -50,15 +56,15 @@ export class GroupPageComponent implements OnInit {
 
   sortList(): void {
     this.isDesc = !this.isDesc;
-
+    const groups = this.groups$.getValue();
     if (this.isDesc)
-      this.groups?.sort((a, b) => {
+      groups?.sort((a, b) => {
         if (a.number < b.number) return -1;
         else if (a.number > b.number) return 1;
         else return 0;
       });
     else
-      this.groups?.sort((a, b) => {
+      groups?.sort((a, b) => {
         if (a.number > b.number) return -1;
         else if (a.number < b.number) return 1;
         else return 0;

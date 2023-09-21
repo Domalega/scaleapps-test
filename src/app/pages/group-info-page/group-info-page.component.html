@@ -14,7 +14,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let student of students">
+            <tr *ngFor="let student of students$ | async">
               <td class="px-4 py-2 text-center border">
                 {{ student.date }}
               </td>
